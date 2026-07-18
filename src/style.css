@@ -1,0 +1,478 @@
+/* ---------------------------------------------------------------
+   Design tokens — "wood-and-stout" Irish pub palette
+   --------------------------------------------------------------- */
+:root {
+  --stout: #1b120c; /* near-black, pulled pint of stout */
+  --wood: #3e2723; /* oak barrel / bar top */
+  --wood-light: #5d4037;
+  --foam: #f5e6c8; /* Guinness foam / cream */
+  --foam-dim: #e8d6ac;
+  --amber: #d4a017; /* lager / brass fittings */
+  --kelly: #0b6e4f; /* Irish green accent */
+  --copper: #b5651d; /* dark ale */
+  --hop-green: #7c9a3b; /* IPA */
+  --chalk: #f2ead6;
+
+  --font-display: 'Rye', 'Georgia', serif;
+  --font-body: 'Quicksand', 'Segoe UI', sans-serif;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--stout);
+  color: var(--foam);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------------------------------------------------------------
+   Layout shell — looks like the inside of a snug wood-paneled pub
+   --------------------------------------------------------------- */
+.pub-app {
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 16px calc(env(safe-area-inset-bottom, 0px) + 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background:
+    radial-gradient(ellipse at top, rgba(212, 160, 23, 0.08), transparent 55%),
+    repeating-linear-gradient(
+      90deg,
+      var(--wood) 0px,
+      var(--wood) 38px,
+      var(--wood-light) 38px,
+      var(--wood-light) 40px
+    );
+  background-color: var(--stout);
+}
+
+.pub-header {
+  text-align: center;
+  padding-top: 6px;
+}
+
+.pub-sign {
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+  letter-spacing: 0.5px;
+  margin: 0;
+  color: var(--amber);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), 0 0 18px rgba(212, 160, 23, 0.35);
+  animation: neonFlicker 1.4s ease-in-out 1;
+}
+
+@keyframes neonFlicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    opacity: 1;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), 0 0 18px rgba(212, 160, 23, 0.35);
+  }
+  20%, 24%, 55% {
+    opacity: 0.4;
+    text-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pub-sign {
+    animation: none;
+  }
+}
+
+.pub-sub {
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+  color: var(--foam-dim);
+  font-weight: 600;
+}
+
+.grade-badge {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  color: var(--amber);
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------
+   Chalkboard total tally — the signature element
+   --------------------------------------------------------------- */
+.total-board {
+  background: linear-gradient(180deg, #2a2a28, #1c1c1a);
+  border: 10px solid var(--wood-light);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4), 0 6px 14px rgba(0, 0, 0, 0.4);
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.total-board__year {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  color: var(--foam-dim);
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+.total-board__count {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  line-height: 1;
+  color: var(--chalk);
+  text-shadow: 0 0 6px rgba(245, 230, 200, 0.25);
+}
+
+.total-board__label {
+  font-size: 0.85rem;
+  color: var(--foam-dim);
+  font-weight: 600;
+}
+
+.loading-pulse {
+  font-size: 1.6rem;
+  animation: loadingPulse 1.3s ease-in-out infinite;
+}
+
+@keyframes loadingPulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.reset-link {
+  position: absolute;
+  right: 6px;
+  bottom: 7px;
+  background: none;
+  border: none;
+  color: var(--foam-dim);
+  opacity: 0.35;
+  font-size: 0.7rem;
+  letter-spacing: 0.3px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  padding: 3px 6px;
+}
+
+.reset-link:hover,
+.reset-link:active {
+  opacity: 0.75;
+}
+
+.reset-link:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+
+.share-link {
+  position: absolute;
+  left: 6px;
+  bottom: 3px;
+  background: none;
+  border: none;
+  color: var(--foam-dim);
+  opacity: 0.35;
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 3px 6px;
+}
+
+.share-link:hover,
+.share-link:active {
+  opacity: 0.75;
+}
+
+.share-link:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+
+/* ---------------------------------------------------------------
+   Beer tiles — 2x2 tap grid
+   --------------------------------------------------------------- */
+.beer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.beer-section__eyebrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2px;
+  font-size: 0.72rem;
+  color: var(--foam-dim);
+  opacity: 0.75;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pub-count-badge {
+  font-variant-caps: normal;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.beer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* --------------------------------------------------------------
+   Pub tag — optional, feature-flagged single "where are you" input
+   -------------------------------------------------------------- */
+.pub-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(245, 230, 200, 0.06);
+  border: 1px solid rgba(245, 230, 200, 0.18);
+  border-radius: 999px;
+  padding: 6px 10px;
+  opacity: 0.85;
+}
+
+.pub-tag__icon {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.pub-tag__input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--foam);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+}
+
+.pub-tag__input::placeholder {
+  color: rgba(245, 230, 200, 0.4);
+}
+
+.pub-tag__clear {
+  background: none;
+  border: none;
+  color: var(--foam-dim);
+  opacity: 0.6;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 2px 4px;
+}
+
+.pub-tag__clear:hover {
+  opacity: 1;
+}
+
+.beer-tile {
+  position: relative;
+  overflow: hidden;
+  border: none;
+  border-radius: 16px;
+  padding: 18px 10px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  color: var(--stout);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35), 0 6px 14px rgba(0, 0, 0, 0.3);
+  transition: transform 0.08s ease;
+}
+
+.beer-tile:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.beer-tile:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.beer-tile--lager {
+  background: linear-gradient(160deg, #f6c453, var(--amber));
+}
+.beer-tile--ale {
+  background: linear-gradient(160deg, #d98a3d, var(--copper));
+}
+.beer-tile--dark {
+  background: linear-gradient(160deg, #6b4a3a, #2e1c14);
+  color: var(--chalk);
+}
+.beer-tile--ipa {
+  background: linear-gradient(160deg, #a4c25a, var(--hop-green));
+}
+
+.beer-tile__glyph {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.beer-tile__label {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.beer-tile__count {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+}
+
+.beer-tile__burst {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  animation: floatUp 0.9s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.8);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-26px) scale(1);
+  }
+}
+
+.beer-tile.is-pulsing .beer-tile__glyph {
+  animation: mugPulse 0.5s ease;
+}
+
+@keyframes mugPulse {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  35% {
+    transform: scale(1.3) rotate(-8deg);
+  }
+  65% {
+    transform: scale(1.15) rotate(6deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* ---------------------------------------------------------------
+   Holiday strip + error strip
+   --------------------------------------------------------------- */
+.holiday-strip {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--foam-dim);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 999px;
+  padding: 8px 14px;
+  margin: 0;
+}
+
+.holiday-reroll {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 6px;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  vertical-align: middle;
+}
+
+.holiday-reroll:hover,
+.holiday-reroll:active {
+  opacity: 1;
+}
+
+.error-strip {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #ffb4a2;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------
+   Cheers toast
+   --------------------------------------------------------------- */
+.cheers-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 90px;
+  transform: translate(-50%, 10px);
+  background: var(--kelly);
+  color: var(--chalk);
+  font-weight: 700;
+  padding: 10px 18px;
+  border-radius: 999px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+  max-width: 90%;
+  text-align: center;
+}
+
+.cheers-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ---------------------------------------------------------------
+   Footer — "Buy Me a Coffee" kept small & unobtrusive
+   --------------------------------------------------------------- */
+.pub-footer {
+  margin-top: auto;
+  position: relative;
+  text-align: center;
+  padding-top: 8px;
+}
+
+.coffee-link {
+  font-size: 0.72rem;
+  color: rgba(245, 230, 200, 0.45);
+  text-decoration: none;
+}
+
+.coffee-link:hover,
+.coffee-link:active {
+  color: rgba(245, 230, 200, 0.75);
+  text-decoration: underline;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .beer-tile__burst,
+  .is-pulsing .beer-tile__glyph {
+    animation: none !important;
+  }
+}
